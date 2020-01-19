@@ -1,4 +1,4 @@
-package nl.vv32.jobutil.functional;
+package nl.vv32.jobutil.lang;
 
 @FunctionalInterface
 public interface Disposable {

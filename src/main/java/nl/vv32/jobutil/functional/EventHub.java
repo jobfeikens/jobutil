@@ -1,5 +1,7 @@
 package nl.vv32.jobutil.functional;
 
+import nl.vv32.jobutil.lang.Disposable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

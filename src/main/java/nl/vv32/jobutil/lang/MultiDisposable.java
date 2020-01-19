@@ -1,4 +1,4 @@
-package nl.vv32.jobutil.functional;
+package nl.vv32.jobutil.lang;
 
 import java.util.ArrayList;
 import java.util.Arrays;
