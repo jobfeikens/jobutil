@@ -9,11 +9,11 @@ public class MultiDisposable implements Disposable {
     final private List<Disposable> disposables = new ArrayList<>();
 
     public MultiDisposable(Disposable... disposables) {
-        add(disposables);
+        addAll(disposables);
     }
 
     public void add(Disposable... disposables) {
-        this.disposables.addAll(Arrays.asList(disposables));
+        addAll(disposables);
     }
 
     public void remove(Disposable disposable) {
@@ -23,5 +23,9 @@ public class MultiDisposable implements Disposable {
     @Override
     public void dispose() {
         disposables.forEach(Disposable::dispose);
+    }
+
+    private void addAll(Disposable... disposables) {
+        this.disposables.addAll(Arrays.asList(disposables));
     }
 }
