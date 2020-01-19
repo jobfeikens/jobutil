@@ -8,12 +8,9 @@ public class BiEventHub<T, U> {
 
     final private List<BiConsumer<T, U>> eventListeners = new ArrayList<>();
 
-    public boolean addListener(BiConsumer<T, U> listener) {
-        return eventListeners.add(listener);
-    }
-
-    public boolean removeListener(BiConsumer<T, U> listener) {
-        return eventListeners.remove(listener);
+    public Disposable addListener(BiConsumer<T, U> eventListener) {
+        eventListeners.add(eventListener);
+        return () -> eventListeners.remove(eventListener);
     }
 
     public void clear() {

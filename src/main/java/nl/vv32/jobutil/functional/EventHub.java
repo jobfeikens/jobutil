@@ -8,12 +8,9 @@ public class EventHub<T> {
 
     final private List<Consumer<T>> eventListeners = new ArrayList<>();
 
-    public boolean addListener(Consumer<T> listener) {
-        return eventListeners.add(listener);
-    }
-
-    public boolean removeListener(Consumer<T> listener) {
-        return eventListeners.remove(listener);
+    public Disposable addListener(Consumer<T> eventListener) {
+        eventListeners.add(eventListener);
+        return () -> eventListeners.remove(eventListener);
     }
 
     public void clear() {
