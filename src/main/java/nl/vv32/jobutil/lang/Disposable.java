@@ -4,4 +4,8 @@ package nl.vv32.jobutil.lang;
 public interface Disposable {
 
     void dispose();
+
+    default MultiDisposable add(Disposable other) {
+        return new MultiDisposable(this, other);
+    }
 }
