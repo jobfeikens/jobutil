@@ -6,7 +6,7 @@ import java.util.List;
 
 public class MultiDisposable implements Disposable {
 
-    final private List<Disposable> disposables = new ArrayList<>();
+    final protected List<Disposable> disposables = new ArrayList<>();
 
     public MultiDisposable(Disposable... disposables) {
         addAll(disposables);
