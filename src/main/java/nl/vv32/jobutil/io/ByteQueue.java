@@ -4,19 +4,17 @@ import java.util.Arrays;
 
 public class ByteQueue {
 
-    @FunctionalInterface
-    public interface ByteBufferConsumer {
-
-        void accept(byte[] buffer, int offset, int length);
-    }
-
     private byte[] array = new byte[0];
     private int tail = 0;
 
-    public void add(int length, ByteBufferConsumer consumer) {
-        if(tail + length > array.length) {
-            array = Arrays.copyOf(array, array.length + length);
+    public void ensureCapacity(int capacity) {
+        if(capacity > array.length) {
+            array = Arrays.copyOf(array, capacity);
         }
+    }
+
+    public void add(int length, ByteBufferConsumer consumer) {
+        ensureCapacity(tail + length);
         consumer.accept(array, tail, length);
         tail += length;
     }
@@ -26,11 +24,19 @@ public class ByteQueue {
         return ((array[0] & 0xFF) << 24) | ((array[1] & 0xFF) << 16) | ((array[2] & 0xFF) << 8) | (array[3] & 0xFF);
     }
 
-    public byte[] peekBytes(int offset, int length) {
-        assert tail >= offset + length;
-        byte[] subArray = new byte[length];
-        System.arraycopy(array, offset, subArray, 0, length);
-        return subArray;
+    public void peekBytes(byte[] bytes, int offset) {
+        assert tail >= offset + bytes.length;
+        System.arraycopy(array, offset, bytes, 0, bytes.length);
+    }
+
+    public void peekBytes(byte[] bytes) {
+        peekBytes(bytes, 0);
+    }
+
+    public byte[] peekBytes(int offset, int amount) {
+        byte[] bytes = new byte[amount];
+        peekBytes(bytes, offset);
+        return bytes;
     }
 
     public byte[] peekBytes(int amount) {
@@ -45,5 +51,11 @@ public class ByteQueue {
         assert tail >= amount;
         System.arraycopy(array, amount, array, 0, array.length);
         tail -= amount;
+    }
+
+    @FunctionalInterface
+    public interface ByteBufferConsumer {
+
+        void accept(byte[] buffer, int offset, int length);
     }
 }
