@@ -23,13 +23,13 @@ public class ByteQueue {
     }
 
     public void remove(int amount) {
-        if(amount <= available) {
-            for(int i = 0; i < array.length; i++) {
-                if(i + amount < array.length) {
-                    array[i] = array[i + amount];
-                } else {
-                    array[i] = 0;
-                }
+        assert amount <= available;
+
+        for (int i = 0; i < array.length; i++) {
+            if (i + amount < array.length) {
+                array[i] = array[i + amount];
+            } else {
+                array[i] = 0;
             }
         }
         available -= amount;
