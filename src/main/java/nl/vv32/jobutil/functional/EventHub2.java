@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class BiEventHub<T, U> {
+public class EventHub2<T, U> {
 
     final private List<BiConsumer<T, U>> eventListeners = new ArrayList<>();
 
