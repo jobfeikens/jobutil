@@ -1,6 +1,6 @@
 package nl.vv32.jobutil.functional;
 
-import nl.vv32.jobutil.lang.Disposable;
+import nl.vv32.jobutil.lang.Subscription;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ public class EventHub<T> {
 
     final private List<Consumer<T>> eventListeners = new ArrayList<>();
 
-    public Disposable addListener(Consumer<T> eventListener) {
+    public Subscription addListener(Consumer<T> eventListener) {
         eventListeners.add(eventListener);
         return () -> eventListeners.remove(eventListener);
     }
