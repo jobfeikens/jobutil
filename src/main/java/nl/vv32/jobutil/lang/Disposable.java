@@ -5,7 +5,18 @@ public interface Disposable {
 
     void dispose();
 
-    default MultiDisposable add(Disposable other) {
-        return new MultiDisposable(this, other);
+    default Disposable add(Disposable... disposables) {
+        return () -> {
+            this.dispose();
+            from(disposables).dispose();
+        };
+    }
+
+    static Disposable from(Disposable... disposables) {
+        return () -> {
+            for (Disposable disposable : disposables) {
+                disposable.dispose();
+            }
+        };
     }
 }
