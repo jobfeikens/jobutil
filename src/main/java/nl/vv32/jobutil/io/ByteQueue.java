@@ -1,6 +1,7 @@
 package nl.vv32.jobutil.io;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class ByteQueue {
 
@@ -8,7 +9,7 @@ public class ByteQueue {
     private int tail = 0;
 
     public void ensureCapacity(int capacity) {
-        if(capacity > array.length) {
+        if (capacity > array.length) {
             array = Arrays.copyOf(array, capacity);
         }
     }
@@ -19,31 +20,34 @@ public class ByteQueue {
         tail += length;
     }
 
-    public int peekInt() {
-        assert tail >= Integer.BYTES;
-        return ((array[0] & 0xFF) << 24) | ((array[1] & 0xFF) << 16) | ((array[2] & 0xFF) << 8) | (array[3] & 0xFF);
+    public Optional<Integer> peekInt() {
+        if (tail >= Integer.BYTES) {
+            return Optional.of(
+                (array[0] & 0xFF) << Byte.SIZE * 3 |
+                (array[1] & 0xFF) << Byte.SIZE * 2 |
+                (array[2] & 0xFF) << Byte.SIZE     |
+                (array[3] & 0xFF)
+            );
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public void peekBytes(byte[] bytes, int offset) {
-        assert tail >= offset + bytes.length;
-        System.arraycopy(array, offset, bytes, 0, bytes.length);
+    public Optional<byte[]> peekBytes(int offset, int amount) {
+        if (tail >= offset + amount) {
+            byte[] bytes = new byte[amount];
+            System.arraycopy(array, offset, bytes, 0, amount);
+            return Optional.of(bytes);
+        } else {
+            return Optional.empty();
+        }
     }
 
-    public void peekBytes(byte[] bytes) {
-        peekBytes(bytes, 0);
-    }
-
-    public byte[] peekBytes(int offset, int amount) {
-        byte[] bytes = new byte[amount];
-        peekBytes(bytes, offset);
-        return bytes;
-    }
-
-    public byte[] peekBytes(int amount) {
+    public Optional<byte[]> peekBytes(int amount) {
         return peekBytes(0, amount);
     }
 
-    public int getAvailable() {
+    public int getBytesAvailable() {
         return tail;
     }
 
