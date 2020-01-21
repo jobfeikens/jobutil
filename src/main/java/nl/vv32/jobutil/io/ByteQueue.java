@@ -53,7 +53,7 @@ public class ByteQueue {
 
     public void remove(int amount) {
         assert tail >= amount;
-        System.arraycopy(array, amount, array, 0, array.length);
+        System.arraycopy(array, amount, array, 0, tail - amount);
         tail -= amount;
     }
 
